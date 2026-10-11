@@ -1,0 +1,6 @@
+{
+  "name": "Tarik Menarik Refleksi - SMPN 2 Kemranjen",
+  "description": "Game edukasi interaktif duel Tarik Menarik Refleksi materi Koordinat Kartesius & Refleksi untuk siswa SMPN 2 Kemranjen. Guru Pengampu: Irma Muflihah, S.Pd.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
