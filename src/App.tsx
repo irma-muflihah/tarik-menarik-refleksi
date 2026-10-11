@@ -224,24 +224,26 @@ export default function App() {
       const updatedQuestions = !isCorrect ? [...p1.questions, currentQ] : p1.questions;
       const nextIndex = p1.currentQuestionIndex + 1;
 
-      // Rope dynamics
+      // Rope dynamics directly mapped to 16 questions progress
       let newRope = ropePosition;
       if (isCorrect) {
         sound.playCorrect();
         sound.playPull('left');
         setLastPuller('p1');
         if (isNowFinished) {
-          // Final decisive pull across win line!
+          // Final decisive pull across Blue win line!
           newRope = -100;
         } else {
-          // Pull left, but clamped at -75% so player CANNOT win before answering 16 correct questions!
-          const pullStrength = 8 + Math.min(12, newStreak * 2.5);
-          newRope = Math.max(-75, ropePosition - pullStrength);
+          // 16-step relative progress calculation
+          const scoreDiff = p2.correctCount - newCorrectCount;
+          const baseStep = (scoreDiff / TARGET_CORRECT_TO_WIN) * 72;
+          const comboBonus = Math.min(8, newStreak * 1.5);
+          newRope = Math.max(-78, Math.min(78, baseStep - comboBonus));
         }
       } else {
         // Wrong answer: slip towards red slightly
         sound.playWrong();
-        newRope = Math.min(75, ropePosition + 5);
+        newRope = Math.min(78, ropePosition + 4);
       }
       setRopePosition(newRope);
 
@@ -320,24 +322,26 @@ export default function App() {
       const updatedQuestions = !isCorrect ? [...p2.questions, currentQ] : p2.questions;
       const nextIndex = p2.currentQuestionIndex + 1;
 
-      // Rope dynamics
+      // Rope dynamics directly mapped to 16 questions progress
       let newRope = ropePosition;
       if (isCorrect) {
         sound.playCorrect();
         sound.playPull('right');
         setLastPuller('p2');
         if (isNowFinished) {
-          // Final decisive pull across win line!
+          // Final decisive pull across Red win line!
           newRope = 100;
         } else {
-          // Pull right, but clamped at +75% so player CANNOT win before answering 16 correct questions!
-          const pullStrength = 8 + Math.min(12, newStreak * 2.5);
-          newRope = Math.min(75, ropePosition + pullStrength);
+          // 16-step relative progress calculation
+          const scoreDiff = newCorrectCount - p1.correctCount;
+          const baseStep = (scoreDiff / TARGET_CORRECT_TO_WIN) * 72;
+          const comboBonus = Math.min(8, newStreak * 1.5);
+          newRope = Math.max(-78, Math.min(78, baseStep + comboBonus));
         }
       } else {
         // Wrong answer: slip towards blue slightly
         sound.playWrong();
-        newRope = Math.max(-75, ropePosition - 5);
+        newRope = Math.max(-78, ropePosition - 4);
       }
       setRopePosition(newRope);
 
